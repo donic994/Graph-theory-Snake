@@ -47,9 +47,9 @@ class Graph:
             if [edge.start, edge.end] in node_pairs:
                 return ValueError('Edge {} {} already exists'.format(n1, n2))
 
-        self.edges.append(Edge(start=n1, end=n2, cost=cost))
+        self.edges.append(Edge(start=str(n1), end=str(n2), cost=cost))
         if both_ends:
-            self.edges.append(Edge(start=n2, end=n1, cost=cost))
+            self.edges.append(Edge(start=str(n2), end=str(n1), cost=cost))
 
     @property
     def neighbours(self):
