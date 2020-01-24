@@ -50,7 +50,6 @@ def createGraphImage():
 def populateGraph():
     for i in range(15):
         for j in range(15):
-
             if(matrix[i][j] == [0, 0]):
                 graph.add_edge(matrix[i][j], matrix[i][j+1])
                 graph.add_edge(matrix[i][j], matrix[i+1][j])
@@ -260,9 +259,6 @@ w.create_line(260, 0, 260, 300)
 w.create_line(280, 0, 280, 300)
 w.create_line(300, 0, 300, 300)
 
-for s in snake:
-    for i in range(15):
-        w.create_rectangle(i, i*2, i*2, i, fill='red')
-
+w.create_rectangle(40, 60, 60, 40, fill='red')
 
 mainloop()
