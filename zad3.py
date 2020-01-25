@@ -171,7 +171,7 @@ def createFood():
                 r1 = random.randint(1, 15)
                 r2 = random.randint(1, 15)
                 f = [r1, r2]
-                createFood()
+               # createFood()
             else:
                 break
         else:
