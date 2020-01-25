@@ -30,7 +30,7 @@ food = []
 foodObject = []
 
 tk = Tk()
-tk.title = "Snake"
+tk.title("Snake")
 tk.resizable(0, 0)
 
 w = Canvas(tk, width=300, height=300, bg='#FFFAF0')
@@ -168,7 +168,7 @@ def createFood():
                 r2 = random.randint(1, 16)
                 f = [r1, r2]
                 food.append(f)
-                createFood()
+                #createFood()
             else:
                 break
         else:

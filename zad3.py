@@ -34,7 +34,7 @@ food = []
 foodObject = []
 
 tk = Tk()
-tk.title = "Snake"
+tk.title("Snake")
 tk.resizable(0,0)
 
 w = Canvas(tk, width=300, height=300, bg = '#FFFAF0')
@@ -295,7 +295,7 @@ def closestFood(head):
 Shows the trail behind snake of all positions snake has passed.
 """
 def showPathWhileMoving(w):
-    stringBodyPart = snake[6].split(',')
+    stringBodyPart = snake[7].split(',')
     x1 = int(stringBodyPart[0][1:])
     y1 = int(stringBodyPart[1][:-1])
     w.create_rectangle(x1*20-20, y1*20-20, x1*20, y1*20, fill='#2296b9')
