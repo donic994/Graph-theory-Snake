@@ -1,3 +1,20 @@
+"""
+ASSIGNMENT 1:
+A small application with 15x15 grid needs to be implemented. 
+Each box on the grid has its own coordinate.
+On that grid, a 7-squares long snake should be displayed. 
+The position and orientation of the snake should be determined randomly, as should the position of the two squares. 
+The size of the snake remains the same when collecting new squares.
+It is necessary to find the shortest path by which the snake would pick up both squares 
+without colliding with itself or against the wall, that is, the edge of the grid. 
+Should such a scenario occur, it would collide with itself or hit the edge of the net, 
+the game is over and the task must be solved from scratch.
+Attach graphic images of the implemented solution. 
+It is important to see the initial situation and the shortest path to the final solution.
+Show the movement of the snake graphically (from a software solution or displayed in an arbitrary graphical tool) 
+and by specifying the coordinates of the boxes.
+"""
+
 import dijkstra
 import random
 import networkx as nx
@@ -19,6 +36,9 @@ tk.resizable(0, 0)
 w = Canvas(tk, width=300, height=300, bg='#FFFAF0')
 w.pack()
 
+"""
+This method initializes methods for creating matrix, snake and food
+"""
 def initializeAll(w):
     createMatrix()
     createSnake()
@@ -29,7 +49,9 @@ def initializeAll(w):
 
     move()
 
-
+"""
+Creates matrix that we later transfer to a graph
+"""
 def createMatrix():
     for i in range(0, 16):
         row = []
@@ -39,7 +61,10 @@ def createMatrix():
         matrix.append(row)
     populateGraph()
 
-
+"""
+Populates graph with vertices that are neighbours
+Two vertices are neighbours if they have mutual edge in a matrix/grid.
+"""
 def populateGraph():
     for i in range(1, 16):
         for j in range(1, 16):
@@ -79,7 +104,11 @@ def populateGraph():
                 graph.add_edge(matrix[i][j], matrix[i][j+1])
                 graph.add_edge(matrix[i][j], matrix[i][j-1])
 
-
+"""
+Creates a snake that is seven consecutive squares long.
+Positions of squares are selected in such way that no square ends up in a wall.
+Positions oof squares are stored in a list.
+"""
 def createSnake():
     r1 = random.randint(1, 15)
     r2 = random.randint(1, 15)
@@ -108,7 +137,11 @@ def createSnake():
         snake.append(str([r1, r2-5]))
         snake.append(str([r1, r2-6]))
 
-
+"""
+Creates snake body parts based on square positions that we can show on canvas.
+Body parts are represented as green rectangles on canvas.
+Body parts(rectangles on canvas) are stored in a list so we can manipulate with them later on.
+"""
 def showSnake():
     for s in snake:
         stringBodyPart = s.split(',')
@@ -118,13 +151,18 @@ def showSnake():
             x1*20-20, y1*20-20, x1*20, y1*20, fill='#22bb45')
         snakeBodyParts.append(bodyPart)
 
-
+"""
+Creates two foods. 
+Generates random x and y positon of a food to be represented on grid. 
+If the food position is not already taken by the snakes body, we save it in a list.
+If the food position is already taken by the snakes body, we generate new position as long as we dont get the one that isnt taken.
+"""
 def createFood():
     for _ in range(2):
         r1 = random.randint(1, 15)
         r2 = random.randint(1, 15)
         f = [r1, r2]
-        if(str(f) in snake):
+        if(f in snake):
             if(len(food) < 2):
                 r1 = random.randint(1, 16)
                 r2 = random.randint(1, 16)
@@ -138,7 +176,11 @@ def createFood():
             if(len(food) == 2):
                 break
 
-
+"""
+Creates food object based on food positions that we can show on canvas.
+Food objects are represented as red rectangles on canvas.
+Food objects (rectangles on canvas) are stored in a list so we can manipulate with them later on.
+"""
 def showFood():
     for var in food:
         x1 = var[0]
@@ -147,6 +189,12 @@ def showFood():
         foodObject.append(f)
 
 
+"""
+Removes edges from the graph that are located in snake.
+This is done so we wont have to deal with snake eating herself.
+By removing edges from the graph, our algorithm (Dijkstra) can't take those edges in calculation 
+and therefore snake can't take path that colides with her own body.
+"""
 def removeSnakeFromGraph():
     graph.remove_edge(str(snake[0]), str(snake[1]))
     graph.remove_edge(str(snake[0]), str(snake[2]))
@@ -159,15 +207,10 @@ def removeSnakeFromGraph():
     graph.remove_edge(str(snake[3]), str(snake[4]))
     graph.remove_edge(str(snake[4]), str(snake[5]))
     graph.remove_edge(str(snake[5]), str(snake[6]))
-    #  graph.remove_edge(snake[0], snake[0])
-    # graph.remove_edge(snake[1], snake[1])
-    # graph.remove_edge(snake[2], snake[2])
-    # graph.remove_edge(snake[3], snake[3])
-    # graph.remove_edge(snake[4], snake[4])
-    # graph.remove_edge(snake[5], snake[5])
-    # graph.remove_edge(snake[6], snake[6])
 
-
+"""
+Adding edges to the graph that are located in snake.
+"""
 def addSnakeToGraph():
     graph.add_edge(str(snake[0]), str(snake[1]))
     graph.add_edge(str(snake[1]), str(snake[2]))
@@ -176,7 +219,14 @@ def addSnakeToGraph():
     graph.add_edge(str(snake[4]), str(snake[5]))
     graph.add_edge(str(snake[5]), str(snake[6]))
 
-
+"""
+First we are removing snake from graph.
+Second we are checking how many more foods are there left to eat.
+We are comparing snakes head position with position of the food. 
+If they are the same, we are removing the food from list, and also deleting food object from canvas.
+Then we are calculating closest path to the food, adding next postion in path as snakes new head and moving snake to its new position.
+If there is no more food left, we print cute message and the game is over.
+"""
 def move():
     while (True):
         tk.update()
@@ -211,7 +261,10 @@ def move():
         snake.insert(0, path[1])
         moveSnake(w)
 
-
+"""
+Calculates the paths from snakes head to food, compares path lenghts and chooses the shortest of the two.
+Returns list of vertices in the path.
+"""
 def closestFood(head):
     path = []
     if(len(food) == 1):
@@ -226,18 +279,13 @@ def closestFood(head):
     print(path)
     return path
 
-
-def showPathWhileMoving(path, w):
-    nextPath = path[1]
-    nextPath = nextPath.translate(str.maketrans('', '', "'[]"))
-    stringPath = str(nextPath)
-    stringPath = stringPath.split(',')
-    x1 = int(stringPath[0])
-    y1 = int(stringPath[1])
-
-    w.create_rectangle(x1*20-20, y1*20-20, x1*20, y1*20, fill='#2296b9')
-
-
+"""
+This method likes to MOVE IT, MOVE IT. 
+This method takes the new head of the snake and based on its position creates body part.
+After the body part is created it is added to the FIRST position in the list of body parts.
+Last element od body part (tail) list is deleted.
+Adding new head, and deleting tail gives the impression of the snake moving on the canvas.
+"""
 def moveSnake(w):
     stringBodyPart = snake[0].split(',')
     x1 = int(stringBodyPart[0][1:])
@@ -250,6 +298,20 @@ def moveSnake(w):
     del snakeBodyParts[-1]
 
 
+"""
+Shows the trail behind snake of all positions snake has passed.
+"""
+def showPathWhileMoving(w):
+    stringBodyPart = snake[6].split(',')
+    x1 = int(stringBodyPart[0][1:])
+    y1 = int(stringBodyPart[1][:-1])
+    w.create_rectangle(x1*20-20, y1*20-20, x1*20, y1*20, fill='#2296b9')
+
+
+"""
+Draws vertical and horizontal lines in canvas.
+We do this to get a visual representation of grid in canvas.
+"""
 def drawLinesInCanvas():
     """Drawing vertical lines"""
     w.create_line(0, 20, 300, 20)
