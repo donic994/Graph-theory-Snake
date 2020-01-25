@@ -17,8 +17,6 @@ and by specifying the coordinates of the boxes.
 
 import dijkstra
 import random
-import networkx as nx
-import matplotlib.pyplot as plt
 from tkinter import Tk, Canvas
 
 matrix = []
@@ -162,10 +160,10 @@ def createFood():
         r1 = random.randint(1, 15)
         r2 = random.randint(1, 15)
         f = [r1, r2]
-        if(f in snake):
+        if(str(f) in snake):
             if(len(food) < 2):
-                r1 = random.randint(1, 16)
-                r2 = random.randint(1, 16)
+                r1 = random.randint(1, 15)
+                r2 = random.randint(1, 15)
                 f = [r1, r2]
                 food.append(f)
                 #createFood()

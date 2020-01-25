@@ -17,8 +17,6 @@ and by specifying the coordinates of the boxes.
 
 import dijkstra
 import random
-import networkx as nx
-import matplotlib.pyplot as plt
 from tkinter import Tk, Canvas
 
 matrix = []
